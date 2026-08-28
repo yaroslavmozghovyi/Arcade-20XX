@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ARCADE 20XX</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Press+Start+2P&family=Rajdhani:wght@500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css?v=3">
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body class="a20x">
+  <div class="scanlines"></div>
+
+  <!-- Навігація -->
+  <nav class="nav">
+    <div class="logo neon-text-pink">
+      <i data-lucide="gamepad-2"></i>
+      <span class="display">ARCADE 20XX</span>
+    </div>
+    <div class="nav-links">
+      <button class="nav-link" onclick="scrollToSection('bracket')" data-i18n="nav_bracket">Сітка</button>
+      <button class="nav-link" onclick="scrollToSection('jukebox')" data-i18n="nav_jukebox">Джукбокс</button>
+      <button class="nav-link" onclick="scrollToSection('leaderboard')" data-i18n="nav_board">Лідери</button>
+      <button id="lang-btn" class="lang-btn" onclick="toggleLang()">ENG</button>
+      <button class="btn" onclick="scrollToSection('bracket')" data-i18n="nav_cta">Створити турнір</button>
+    </div>
+  </nav>
+
+  <!-- Hero Секція -->
+  <header class="hero">
+    <div class="hero-sun"></div>
+    <div class="grid-floor"></div>
+    <div class="hero-content">
+      <div class="eyebrow pixel" style="font-size: 10px;" data-i18n="hero_eyebrow">ІНДИВІДУАЛЬНІ РЕТРО-ТУРНІРИ · СЕЗОН 20XX</div>
+      <h1 class="hero-title">
+        <span class="neon-text-pink" data-i18n="hero_title1">ARCADE</span><br>
+        <span class="neon-text-cyan" data-i18n="hero_title2">20XX</span>
+      </h1>
+      <p class="hero-sub" data-i18n="hero_sub">Постав кредит, обери автомат, стань легендою. Платформа персональних турнірів у світі неону, растрів і восьми бітів.</p>
+      <div class="hero-actions">
+        <button class="btn" onclick="scrollToSection('bracket')" data-i18n="hero_cta1">Створити турнір</button>
+        <button class="btn ghost" onclick="scrollToSection('bracket')" data-i18n="hero_cta2">Дивитись сітку</button>
+      </div>
+      <div class="stats-row">
+        <div><div class="stat-num neon-text-cyan">1,204</div><div class="stat-label" data-i18n="stat_players">ГРАВЦІВ У РЕЙТИНГУ</div></div>
+        <div><div class="stat-num neon-text-pink">8,517</div><div class="stat-label" data-i18n="stat_matches">ЗІГРАНО МАТЧІВ</div></div>
+        <div><div class="stat-num neon-text-yellow">42</div><div class="stat-label" data-i18n="stat_cabinets">РЕТРО-АВТОМАТІВ</div></div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- Турнірна сітка -->
+    <section id="bracket" class="section">
+      <div class="section-head">
+        <div class="eyebrow" data-i18n="br_eyebrow">ТУРНІРНА СІТКА</div>
+        <h2 class="section-title" data-i18n="br_title">Neon Bracket</h2>
+        <p class="section-sub" data-i18n="br_sub">Наведи курсор на гравця — підсвітиться його шлях до фіналу</p>
+      </div>
+      <div id="bracket-container" class="bracket-wrap"></div>
+    </section>
+
+    <!-- Плеєр Jukebox -->
+    <section id="jukebox" class="section">
+      <div class="section-head">
+        <div class="eyebrow" data-i18n="jb_eyebrow">ЗВУКОВИЙ РЯД</div>
+        <h2 class="section-title" data-i18n="jb_title">Chiptune Jukebox</h2>
+        <p class="section-sub" data-i18n="jb_sub">Живий 8-бітний саунд, згенерований прямо у браузері</p>
+      </div>
+      
+      <div class="jukebox-card">
+        <!-- Ліва панель (Візуалізатор) -->
+        <div class="jukebox-visual">
+          <div class="now-playing-label mono" data-i18n="jb_now">ЗАРАЗ ГРАЄ</div>
+          <canvas id="audio-canvas" width="400" height="180"></canvas>
+          <div class="now-playing-info">
+            <div id="track-title" class="track-title neon-text-cyan">04 8-бітний Захід</div>
+            <div id="track-meta" class="track-meta">ТРЕК 04/04 · 92 BPM · SQUARE</div>
+          </div>
+        </div>
+
+        <!-- Права панель (Список треків + Контролери) -->
+        <div class="jukebox-controls">
+          <div id="track-list" class="track-list"></div>
+          
+          <div class="transport">
+            <button class="transport-btn" onclick="prevTrack()"><i data-lucide="skip-back"></i></button>
+            <button id="play-btn" class="transport-btn play" onclick="togglePlay()"><i data-lucide="play"></i></button>
+            <button class="transport-btn" onclick="nextTrack()"><i data-lucide="skip-forward"></i></button>
+          </div>
+          
+          <div class="volume-row">
+            <i data-lucide="volume-2"></i>
+            <input type="range" id="volume-slider" min="0" max="1" step="0.01" value="0.4">
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Таблиця лідерів -->
+    <section id="leaderboard" class="section">
+      <div class="section-head">
+        <div class="eyebrow" data-i18n="lb_eyebrow">РЕЙТИНГ</div>
+        <h2 class="section-title" data-i18n="lb_title">Live Leaderboard</h2>
+        <p class="section-sub" data-i18n="lb_sub">Обери сортування — рядки плавно поміняються місцями</p>
+      </div>
+      <div class="filters">
+        <button id="sort-score" class="filter-btn active" onclick="sortLeaderboard('score')" data-i18n="sort_score">За рахунком</button>
+        <button id="sort-wins" class="filter-btn" onclick="sortLeaderboard('wins')" data-i18n="sort_wins">За перемогами</button>
+        <button id="sort-wr" class="filter-btn" onclick="sortLeaderboard('wr')" data-i18n="sort_wr">За % перемог</button>
+      </div>
+      <table class="board">
+        <thead>
+          <tr>
+            <th data-i18n="th_rank">#</th>
+            <th data-i18n="th_player">ГРАВЕЦЬ</th>
+            <th data-i18n="th_region">РЕГІОН</th>
+            <th data-i18n="th_score">РАХУНОК</th>
+            <th data-i18n="th_wins">ПЕРЕМОГИ</th>
+            <th data-i18n="th_wr">% ПЕРЕМОГ</th>
+          </tr>
+        </thead>
+        <tbody id="leaderboard-body"></tbody>
+      </table>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div data-i18n="foot_text">Створено для героїв аркадних залів.</div>
+    <div class="foot-coin" data-i18n="foot_coin">INSERT COIN TO CONTINUE</div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
